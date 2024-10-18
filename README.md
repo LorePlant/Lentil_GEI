@@ -12,8 +12,12 @@ library(metan)
 ```
 
 > BLUP estimation for the whole set of 46 genotypes in è different environment
-Considering the linear model (1) $P = G + E + GEI$ the phenotypic value of a trait of any individual in a given environment can be written as the sum of its genetic effect G, the environmental effect E, the genotype by environment interaction (GEI) and e as the random residual effect within each environment following a normal distribution N (0, σ2) 
-Considering G, E and GEI as random factors we estimated the respective variance component using residual maximum likelihood (RELM) 
+
+Considering the linear model:
+ (1) $P = G + E + GEI$
+the phenotypic value of a trait of any individual in a given environment can be written as the sum of its genetic effect G, the environmental effect E, the genotype by environment interaction (GEI) and e as the random residual effect within each environment following a normal distribution N (0, σ2).
+
+Considering G, E and GEI as random factors we estimated the respective variance component using residual maximum likelihood (RELM).
 From the equation (1) by modelling the genotypic effect (G) and GEI as random and (E) as fixed, the Best Linear Unbiased Prediction for genotypes (BLUPg) (Piepho et al., 1998; Piepho et al., 1994) or the genotypic value was estimated for the entire set of 46 genotypes.  
 ```
 #Yield
@@ -28,7 +32,7 @@ library(ggplot2)
 b <- plot_blup(mixed_mod, which = "gen", plot_theme = theme_metan_minimal())
 b
 ```
-This the ouput directacly from the Metan package. For a more personalzed output here is a ggplot option
+For a more personalzed output using a ggplot
 ```
 
   blup_yld<-data.frame(mixed_mod$YLD$BLUPgen)

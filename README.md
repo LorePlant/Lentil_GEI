@@ -15,6 +15,7 @@ library(metan)
 
 Considering the linear model:
  (1) $P = G + E + GEI$
+ 
 the phenotypic value of a trait of any individual in a given environment can be written as the sum of its genetic effect G, the environmental effect E, the genotype by environment interaction (GEI) and e as the random residual effect within each environment following a normal distribution N (0, σ2).
 
 Considering G, E and GEI as random factors we estimated the respective variance component using residual maximum likelihood (RELM).

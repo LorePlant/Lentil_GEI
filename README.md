@@ -58,20 +58,3 @@ BLUP
 
 
 
-get_model_data(gen_mod, "genpar") 
-#plot blup all together
-mixed_mod<-gamem_met(data, env = ENV, gen = GEN, rep = REP, resp = First_flower, random = ("gen"), verbose = TRUE)
-a<- plot_blup(mixed_mod, which = "gen", size.tex.lab = 4, plot_theme = theme_metan_minimal())
-mixed_mod<-gamem_met(data, env = ENV, gen = GEN, rep = REP, resp = Frist_pod, random = ("gen"), verbose = TRUE)
-b <- plot_blup(mixed_mod, which = "gen",size.tex.lab = 4, plot_theme = theme_metan_minimal())
-mixed_mod<-gamem_met(data, env = ENV, gen = GEN, rep = REP, resp = CH, random = ("gen"), verbose = TRUE)
-c <- plot_blup(mixed_mod, which = "gen",size.tex.lab = 4, plot_theme = theme_metan_minimal())
-mixed_mod<-gamem_met(data, env = ENV, gen = GEN, rep = REP, resp = PH, random = ("gen"), verbose = TRUE)
-d <- plot_blup(mixed_mod, which = "gen",size.tex.lab = 4, plot_theme = theme_metan_minimal())
-mixed_mod<-gamem_met(data, env = ENV, gen = GEN, rep = REP, resp = FPH, random = ("gen"), verbose = TRUE)
-e<- plot_blup(mixed_mod, which = "gen", size.tex.lab = 4,plot_theme = theme_metan_minimal())
-mixed_mod<-gamem_met(data, env = ENV, gen = GEN, rep = REP, resp = YLD, random = ("gen"), verbose = TRUE)
-f <- plot_blup(mixed_mod, which = "gen", size.tex.lab = 4, plot_theme = theme_metan_minimal())
-mixed_mod<-gamem_met(data, env = ENV, gen = GEN, rep = REP, resp = SW, random = ("gen"), verbose = TRUE)
-g<- plot_blup(mixed_mod, which = "gen",size.tex.lab = 4, plot_theme = theme_metan_minimal())
-arrange_ggplot(a, b, c, d, e, f,g, ncol = 2)

@@ -4,7 +4,7 @@ In this readme are reported all the analysis steps present in the paper of Rocch
 
 > open libraries and set directory
 ```
-setwd("/lustre/rocchettil/Paper_lentil")
+setwd("/lustre/rocchettil/Paper_lentil/Manoscript_Lentil_editing")
 datalentil46<- read.csv("lentil46whole.csv", header = TRUE)
 install.packages("colorspace")
 install.packages("metan")
@@ -107,5 +107,19 @@ ggsave("blup46.jpeg", plot = together, device = "jpeg", width = 400, height = 20
 
 ![blup46](https://github.com/user-attachments/assets/e391481e-6473-4d72-acfc-51f29bf4c019)
 
+Phenotypic data collected from the 16 genotypes in common among all trials were used to estimate trait correlation and dissect Genotypes by Environment Interaction (GEI).
+In the upcoming code we are going to estimate BLUPs for each environment following the model  $Y = G + rep + e$
 
+```
+#plot blup all together
+datalentil_16<- read.csv("lentil_16.csv", header = TRUE)
+#Metaponto autumn 2019
+mixed_mod<-gamem(subset(datalentil_16, ENV == "Metaponto_autumn_2019"), gen = GEN, rep= REP, resp = YLD)
+blup_yld_met_autu_2019<-data.frame(mixed_mod$YLD$BLUPgen)
+names(blup_yld_met_autu_2019)[3]<- paste("yld_met_autu_2019")
+mixed_mod<-gamem(subset(datalentil_16, ENV == "Metaponto_autumn_2019"), gen = GEN, rep= REP, resp = FirstF)
+blup_FirstF_met_autu_2019<-data.frame(mixed_mod$FirstF$BLUPgen)
+names(blup_FirstF_met_autu_2019)[3]<- paste("FirstF_met_autu_2019")
+data_c<- data.frame(merge(blup_yld_met_autu_2019, blup_FirstF_met_autu_2019, by = "GEN"))
+```
 

@@ -1,5 +1,5 @@
 
-## Newly identified Lentil (Lens culinaris Medik.) genotypes for Enhanced Adaptation to the Mediterranean Environment 
+## New identified Lentil (Lens culinaris Medik.) genotypes for Enhanced Adaptation to the Mediterranean Environment 
 In this readme are reported all the analysis steps present in the paper of Rocchetti et al.,2025
 
 > open libraries and set directory

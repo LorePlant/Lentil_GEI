@@ -303,8 +303,68 @@ df_list <- list(blup_yld_MA2019, blup_FirstF_MA2019, blup_FirstP_MA2019, blup_CH
 df2 <- df_list %>% reduce(inner_join, by='GEN')
 
 # R base - Select columns from list
-df<-df2[,c("yld_MA2019", "FirstF_MA2019", "FirstP_MA2019", "CH_MA2019", "PH_MA2019", "FPH_MA2019", "yld_MA2020", "FirstF_MA2020", "FirstP_MA2020", "CH_MA2020", "PH_MA2020", "FPH_MA2020", "yld_OA2019", "FirstF_OA2019", "FirstP_OA2019", "CH_OA2019", "PH_OA2019", "FPH_OA2019", "yld_OA2020", "FirstF_OA2020", "FirstP_OA2020", "CH_OA2020", "PH_OA2020", "FPH_OA2020", "yld_OA2021", "FirstF_OA2021", "FirstP_OA2021", "CH_OA2021", "PH_OA2021", "FPH_OA2021", "yld_OS2020", "FirstF_OS2020", "FirstP_OS2020", "CH_OS2020", "PH_OS2020", "FPH_OS2020", "yld_OS2021", "FirstF_OS2021", "FirstP_OS2021", "CH_OS2021", "PH_OS2021", "FPH_OS2021")]
+df<-df2[,c("GEN","yld_MA2019", "FirstF_MA2019", "FirstP_MA2019", "CH_MA2019", "PH_MA2019", "FPH_MA2019", "yld_MA2020", "FirstF_MA2020", "FirstP_MA2020", "CH_MA2020", "PH_MA2020", "FPH_MA2020", "yld_OA2019", "FirstF_OA2019", "FirstP_OA2019", "CH_OA2019", "PH_OA2019", "FPH_OA2019", "yld_OA2020", "FirstF_OA2020", "FirstP_OA2020", "CH_OA2020", "PH_OA2020", "FPH_OA2020", "yld_OA2021", "FirstF_OA2021", "FirstP_OA2021", "CH_OA2021", "PH_OA2021", "FPH_OA2021", "yld_OS2020", "FirstF_OS2020", "FirstP_OS2020", "CH_OS2020", "PH_OS2020", "FPH_OS2020", "yld_OS2021", "FirstF_OS2021", "FirstP_OS2021", "CH_OS2021", "PH_OS2021", "FPH_OS2021")]
 
 
 ```
+The derive dataset contains all the BLUP combination of specific trait and environment. 
+The obtained dataset will be used for a PCA.
 
+```
+#add biological status
+pivot_table <- datalentil_16 %>%
+  select(GEN, Bio_stat) %>%
+  group_by(GEN, Bio_stat) %>%
+  summarise( .groups = 'drop') 
+
+readyPC<-left_join(df, pivot_table, by='GEN')
+
+
+library(FactoMineR)
+library(factoextra)
+rownames(readyPC) <- readyPC$GEN
+res.pca<-PCA(readyPC[,2:43], scale.unit = TRUE, ncp = 5, graph = TRUE)
+ind <- get_pca_ind(res.pca)
+var <- get_pca_var(res.pca)
+var
+library(ggplot2)
+library(ggrepel)
+
+# Create a data frame for PCA results
+pca_data <- as.data.frame(ind$coord)
+pca_data$Bio_stat <- readyPC$Bio_stat
+pca_data$GEN <- readyPC$GEN  # Assuming you want to label individuals with GEN
+
+TAB_var <- as.data.frame(var$coord)
+
+# Plotting
+#scree plot
+scree<- ggplot(pca_data, aes(x = Dim.1, y = Dim.2, color = Bio_stat, label = GEN)) +
+  geom_point(size = 3, shape = 16) +  # Individual points
+  geom_text_repel(size = 3) +         # Add labels with repel
+  scale_color_manual(values = c("darkred", "darkorange", "darkgreen")) +  # Custom color palette
+theme_classic() +
+    xlab("PC1: 33.4%") + ylab("PC1: 23.6%")+
+  labs(title = "PCA Plot", color = "Groups") +
+  theme(legend.title = element_text(size = 10))
+
+ggsave("PCA16scree.jpeg", plot = scree, device = "jpeg", width = 150, height = 150, units = "mm", dpi = 1000)
+```
+![PCA16scree](https://github.com/user-attachments/assets/36a5600e-7456-4dc3-a0f2-15c0ae64b898)
+
+
+
+
+
+
+
+
+#loading
+loading<- ggplot(TAB_var, aes(x = Dim.1, y = Dim.2, color = Bio_stat, label = GEN)) +
+  geom_point(size = 3, shape = 16) +  # Individual points
+  geom_text_repel(size = 3) +         # Add labels with repel
+  scale_color_manual(values = c("darkred", "darkorange", "darkgreen")) +  # Custom color palette
+theme_classic() +
+    xlab("PC1: 33.4%") + ylab("PC1: 23.6%")+
+  labs(title = "PCA Plot", color = "Groups") +
+  theme(legend.title = element_text(size = 10))

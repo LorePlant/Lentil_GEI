@@ -93,21 +93,85 @@ below<- data.frame(gen= blup_f$GEN[which(blup_f$UL<f_average)])
 blup_f$significance <- "Average"
 blup_f$significance[blup_f$GEN%in%above$gen] <- "Above"
 blup_f$significance[blup_f$GEN%in%below$gen] <- "Below"
-F<- ggplot(blup_f, aes(x=Predicted, y=reorder(GEN, Predicted), group =significance)) + 
+F1<- ggplot(blup_f, aes(x=Predicted, y=reorder(GEN, Predicted), group =significance)) + 
     geom_point(aes(col = significance), size=4)+
     geom_vline(xintercept = 118)+
     scale_color_manual(values = c("Blue", "gray", "red"))+
     geom_errorbar(aes(xmin=LL, xmax=UL), width=.1)+
     theme_classic2(base_size = 11)+
-    xlab("Fisrt flower(DAS)") + ylab("genotypes")
-F
+    xlab("First flower(DAS)") + ylab("genotypes")
+F1
 
-together<- ggarrange(F, CH, Yield, nrow = 1, ncol = 3)
+#First pod
 
-ggsave("blup46.jpeg", plot = together, device = "jpeg", width = 400, height = 200, units = "mm", dpi = 1000)
+mixed_mod<-gamem_met(datalentil46, env = ENV, gen = GEN, rep = REP, resp = First_pod, random = ("gen"), verbose = TRUE)
+blup_fp<-data.frame(mixed_mod$First_pod$BLUPgen)
+fp_average<- mean(datalentil46$First_pod, na.rm = TRUE)
+above<- data.frame(gen = blup_f$GEN[which(blup_fp$LL>fp_average)])
+below<- data.frame(gen= blup_f$GEN[which(blup_fp$UL<fp_average)])
+
+
+blup_fp$significance <- "Average"
+blup_fp$significance[blup_f$GEN%in%above$gen] <- "Above"
+blup_fp$significance[blup_f$GEN%in%below$gen] <- "Below"
+FP<- ggplot(blup_fp, aes(x=Predicted, y=reorder(GEN, Predicted), group =significance)) + 
+    geom_point(aes(col = significance), size=4)+
+    geom_vline(xintercept = 130)+
+    scale_color_manual(values = c("Blue", "gray", "red"))+
+    geom_errorbar(aes(xmin=LL, xmax=UL), width=.1)+
+    theme_classic2(base_size = 11)+
+    xlab("First pod(DAS)") + ylab("genotypes")
+FP
+
+
+ #Plant height
+ mixed_mod<-gamem_met(datalentil46, env = ENV, gen = GEN, rep = REP, resp = PH, random = ("gen"), verbose = TRUE)
+ blup_ph<-data.frame(mixed_mod$PH$BLUPgen)
+ ph_average<- mean(datalentil46$PH, na.rm = TRUE)
+ above<- data.frame(gen = blup_ph$GEN[which(blup_ph$LL>ph_average)])
+ below<- data.frame(gen= blup_ph$GEN[which(blup_ph$UL<ph_average)])
+ 
+ 
+ blup_ph$significance <- "Average"
+ blup_ph$significance[blup_ph$GEN%in%above$gen] <- "Above"
+ blup_ph$significance[blup_ph$GEN%in%below$gen] <- "Below"
+ PH<- ggplot(blup_ph, aes(x=Predicted, y=reorder(GEN, Predicted), group =significance)) + 
+     geom_point(aes(col = significance), size=4)+
+     geom_vline(xintercept = 35.10)+
+     scale_color_manual(values = c("Blue", "gray", "red"))+
+     geom_errorbar(aes(xmin=LL, xmax=UL), width=.1)+
+     theme_classic2(base_size = 11)+
+     xlab("Plant Height (cm)") + ylab("genotypes")
+ PH
+
+
+#First pod height
+mixed_mod<-gamem_met(datalentil46, env = ENV, gen = GEN, rep = REP, resp = FPH, random = ("gen"), verbose = TRUE)
+blup_fph<-data.frame(mixed_mod$FPH$BLUPgen)
+fph_average<- mean(datalentil46$FPH, na.rm = TRUE)
+above<- data.frame(gen = blup_fph$GEN[which(blup_fph$LL>fph_average)])
+below<- data.frame(gen= blup_fph$GEN[which(blup_fph$UL<fph_average)])
+
+
+blup_fph$significance <- "Average"
+blup_fph$significance[blup_fph$GEN%in%above$gen] <- "Above"
+blup_fph$significance[blup_fph$GEN%in%below$gen] <- "Below"
+FPH<- ggplot(blup_fph, aes(x=Predicted, y=reorder(GEN, Predicted), group =significance)) + 
+    geom_point(aes(col = significance), size=4)+
+    geom_vline(xintercept = 8.10)+
+    scale_color_manual(values = c("Blue", "gray", "red"))+
+    geom_errorbar(aes(xmin=LL, xmax=UL), width=.1)+
+    theme_classic2(base_size = 11)+
+    xlab("First pod height (cm)") + ylab("genotypes")
+FPH
+
+together<- ggarrange(Yield, F1, FP, CH, PH, FPH, nrow = 2, ncol = 3)
+
+ggsave("blup46.jpeg", plot = together, device = "jpeg", width = 400, height = 300, units = "mm", dpi = 1000)
 
 ```
-![blup46](https://github.com/user-attachments/assets/28c270c3-2a90-4554-a9e9-5c3913d9b5d1)
+![blup46](https://github.com/user-attachments/assets/b8949c25-a9df-4927-af8d-a1ad8a45758c)
+
 
 Phenotypic data collected from the 16 genotypes in common among all trials were used to estimate trait correlation and dissect Genotypes by Environment Interaction (GEI).
 In the upcoming code we are going to estimate BLUPs for each environment following the model  $Y = G + rep + e$

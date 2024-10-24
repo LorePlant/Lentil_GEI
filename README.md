@@ -1,6 +1,6 @@
 
-## New identified Lentil (Lens culinaris Medik.) genotypes for Enhanced Adaptation to the Mediterranean Environment 
-In this readme are reported all the analysis steps present in the paper of Rocchetti et al.,2025
+## Newl-identified Lentil (Lens culinaris Medik.) genotypes for Enhanced Adaptation to the Mediterranean Environment 
+In this readme are reported all the analysis's steps present in the paper of Rocchetti et al.,2025
 
 > open libraries and set directory
 ```
@@ -195,7 +195,7 @@ ggsave("blup46.jpeg", plot = together, device = "jpeg", width = 400, height = 30
 
 
 Phenotypic data collected from the 16 genotypes in common among all trials were used to estimate trait correlation and dissect Genotypes by Environment Interaction (GEI).
-In the upcoming code we are going to estimate BLUPs for each environment following the model  $Y = G + rep + e$
+In the upcoming code we are going to estimate BLUPs for each combination of trait and environment following the model the mixed model  $Y = G + rep + e$ where _G_ is considered random and _rep_ fixed
 
 ```
 #plot blup all together
@@ -395,8 +395,8 @@ df<-df2[,c("GEN","yld_MA2019", "FirstF_MA2019", "FirstP_MA2019", "CH_MA2019", "P
 
 
 ```
-The derive dataset contains all the BLUP combination of specific trait and environment. 
-The obtained dataset will be used for a PCA.
+The derive dataset contains all the BLUP combination for the specific combination of trait and environment. 
+The obtained dataset was used to conducte a PCA to visualize trait's genetic correlation and to have a general agronomic overview of the material
 
 ```
 #add biological status
@@ -407,7 +407,6 @@ pivot_table <- datalentil_16 %>%
 
 readyPC<-left_join(df, pivot_table, by='GEN')
 
-
 library(FactoMineR)
 library(factoextra)
 rownames(readyPC) <- readyPC$GEN
@@ -416,7 +415,7 @@ ind <- get_pca_ind(res.pca)
 var <- get_pca_var(res.pca)
 var
 ```
-Plotting the results using ggplot2
+The results are printed out and plotted using ggplot2
 ```
 library(ggplot2)
 library(ggrepel)
@@ -425,8 +424,6 @@ library(ggrepel)
 pca_data <- as.data.frame(ind$coord)
 pca_data$Bio_stat <- readyPC$Bio_stat
 pca_data$GEN <- readyPC$GEN  # Assuming you want to label individuals with GEN
-
-
 
 # Plotting
 #score plot
@@ -457,7 +454,6 @@ theme_bw(base_size = 13, base_family = "Times") +
   labs(title = "PCA loading plot")
 
 PCAplot<-ggarrange(score, loading, nrow=1, ncol=2)
-
 
 ggsave("PCAplot.jpeg", plot = PCAplot, device = "jpeg", width = 400, height = 180, units = "mm", dpi = 1000, bg = "white")
 ```

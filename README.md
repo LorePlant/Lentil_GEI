@@ -463,7 +463,58 @@ ggsave("PCAplot.jpeg", plot = PCAplot, device = "jpeg", width = 400, height = 18
 
 
 From the same dataset of 16 genotypes in 7 environments we are going to estimate BLUPs for flowering architectural and production traits using the mixed model (1) $P = G + E + GEI$. 
-Traits genetic correlation wull be evaluated using pairwise-Pearson correlation.
+Traits genetic correlation will be evaluated using pairwise-Pearson correlation.
+
+```
+#Yield
+mixed_mod<-gamem_met(datalentil_16, env = ENV, gen = GEN, rep = REP, resp = YLD, random = ("gen"), verbose = TRUE)
+  blup_yld<-data.frame(mixed_mod$YLD$BLUPgen)
+names(blup_yld)[5]<- paste("blup_YLD")
+
+#FirstF
+mixed_mod<-gamem_met(datalentil_16, env = ENV, gen = GEN, rep = REP, resp = FirstF, random = ("gen"), verbose = TRUE)
+  blup_f1<-data.frame(mixed_mod$FirstF$BLUPgen)
+names(blup_f1)[5]<- paste("blup_FirstF")
+
+#FirstP
+mixed_mod<-gamem_met(datalentil_16, env = ENV, gen = GEN, rep = REP, resp = FirstP, random = ("gen"), verbose = TRUE)
+  blup_fp<-data.frame(mixed_mod$FirstP$BLUPgen)
+names(blup_fp)[5]<- paste("blup_FirstP")
 
 
+#CH
+mixed_mod<-gamem_met(datalentil_16, env = ENV, gen = GEN, rep = REP, resp = CH, random = ("gen"), verbose = TRUE)
+  blup_ch<-data.frame(mixed_mod$CH$BLUPgen)
+names(blup_ch)[5]<- paste("blup_CH")
+
+#PH
+mixed_mod<-gamem_met(datalentil_16, env = ENV, gen = GEN, rep = REP, resp = PH, random = ("gen"), verbose = TRUE)
+  blup_ph<-data.frame(mixed_mod$PH$BLUPgen)
+names(blup_ph)[5]<- paste("blup_PH")
+
+#FPH
+mixed_mod<-gamem_met(datalentil_16, env = ENV, gen = GEN, rep = REP, resp = FPH, random = ("gen"), verbose = TRUE)
+  blup_fph<-data.frame(mixed_mod$FPH$BLUPgen)
+names(blup_fph)[5]<- paste("blup_FPH")
+
+#SW
+mixed_mod<-gamem_met(datalentil_16, env = ENV, gen = GEN, rep = REP, resp = SW, random = ("gen"), verbose = TRUE)
+  blup_sw<-data.frame(mixed_mod$SW$BLUPgen)
+names( blup_sw)[5]<- paste("blup_SW")
+
+#put all data frames into list
+df_list <- list(blup_yld,blup_f1, blup_fp, blup_ch, blup_ph, blup_fph, blup_sw)  
+#merge all data frames together
+
+library(tidyverse)
+library(dplyr)
+df <- df_list %>% reduce(inner_join, by='GEN')
+
+# R base - Select columns from list
+df<-df[,c("GEN","blup_YLD", "blup_FirstF", "blup_FirstP","blup_CH", "blup_PH", "blup_FPH", "blup_SW")]
+cc<-corr_plot(df)
+ggsave("corrplot.jpeg", plot = cc, device = "jpeg", width = 250, height = 180, units = "mm", dpi = 1000, bg = "white")
+```
+
+![corrplot](https://github.com/user-attachments/assets/d71abbe2-8bb7-4421-a753-099a416765bf)
 

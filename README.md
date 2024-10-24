@@ -545,8 +545,8 @@ ammi1<-ggplot() +
   geom_vline(xintercept=528, linetype="dashed", color = gray(.80), size=0.6) +
   geom_point(data = subset(data_ammi,type == "GEN"), aes(x=Y, y=PC1, color=Bio_stat), size = 4.5) +
   scale_color_manual(values = c("darkred", "darkorange", "chartreuse3")) + 
-  geom_label_repel(data = subset(data_ammi,type == "GEN"), aes(x=Y, y=PC1, label = Code), size = 2.5, family = "Times", max.overlaps = Inf) +
   geom_segment(data = subset(data_ammi,type == "ENV"), aes(xend=Y, yend=PC1, x=528, y=0), size=0.2, linetype=1, arrow=arrow(length = unit(0.02, "npc")))+
+ geom_label_repel(data = subset(data_ammi,type == "GEN"), aes(x=Y, y=PC1, label = Code), size = 2.5, family = "Times", max.overlaps = Inf) +
   geom_label_repel(data = subset(data_ammi,type == "ENV"), aes(x=Y, y=PC1, label = Code), size = 2.5, family = "Times, max.overlaps = Inf") +
   xlab("Yield (g/plot)") + ylab("PC1: 45%") +
   guides(color=guide_legend(title="Biological status")) +
@@ -578,8 +578,8 @@ ammi2<-ggplot() +
   geom_vline(xintercept=0, linetype="dashed", color = gray(.80), size=0.6) +
   geom_point(data = subset(data_ammi,type == "GEN"), aes(x=PC1, y=PC2, color=Bio_stat), size = 4.5) +
   scale_color_manual(values = c("darkred", "darkorange", "chartreuse3")) + 
-  geom_label_repel(data = subset(data_ammi,type == "GEN"), aes(x=PC1, y=PC2, label = Code), size = 2.5, family = "Times" ,max.overlaps = Inf) +
   geom_segment(data = subset(data_ammi,type == "ENV"), aes(xend=PC1, yend=PC2, x=0, y=0), size=0.2, linetype=1, arrow=arrow(length = unit(0.02, "npc")))+
+geom_label_repel(data = subset(data_ammi,type == "GEN"), aes(x=PC1, y=PC2, label = Code), size = 2.5, family = "Times" ,max.overlaps = Inf) +
   geom_label_repel(data = subset(data_ammi,type == "ENV"), aes(x=PC1, y=PC2, label = Code), size = 2.5, family = "Times", max.overlaps = Inf) +
   xlab("PC1: 45%") + ylab("PC2: 34.7%") +
   guides(color=guide_legend(title="Biological status")) +
@@ -592,4 +592,4 @@ ammi<-ggarrange(ammi1, ammi2, nrow=1, ncol=2)
 ggsave("ammi.jpeg", plot = ammi, device = "jpeg", width = 400, height = 180, units = "mm", dpi = 1000, bg = "white")
 ```
 
-![ammi](https://github.com/user-attachments/assets/73f3d41d-e0c9-4966-8224-96db8b30961a)
+![ammi](https://github.com/user-attachments/assets/ed5609e5-2c97-4497-9fbc-6bef31171c9a)

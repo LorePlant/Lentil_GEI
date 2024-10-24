@@ -463,6 +463,7 @@ ggsave("PCAplot.jpeg", plot = PCAplot, device = "jpeg", width = 400, height = 18
 
 
 From the same dataset of 16 genotypes in 7 environments we are going to estimate BLUPs for flowering architectural and production traits using the mixed model (1) $P = G + E + GEI$. 
+
 Traits genetic correlation will be evaluated using pairwise-Pearson correlation.
 
 ```
@@ -480,7 +481,6 @@ names(blup_f1)[5]<- paste("blup_FirstF")
 mixed_mod<-gamem_met(datalentil_16, env = ENV, gen = GEN, rep = REP, resp = FirstP, random = ("gen"), verbose = TRUE)
   blup_fp<-data.frame(mixed_mod$FirstP$BLUPgen)
 names(blup_fp)[5]<- paste("blup_FirstP")
-
 
 #CH
 mixed_mod<-gamem_met(datalentil_16, env = ENV, gen = GEN, rep = REP, resp = CH, random = ("gen"), verbose = TRUE)
@@ -518,3 +518,78 @@ ggsave("corrplot.jpeg", plot = cc, device = "jpeg", width = 250, height = 180, u
 
 ![corrplot](https://github.com/user-attachments/assets/d71abbe2-8bb7-4421-a753-099a416765bf)
 
+
+The Additive Main Effect and Multiplicative Interaction (AMMI) model (Gauch, 1988; van Eeuwijk, 1995) was used as a fixed model framework to dissect GEI variance in different Interaction Principal Components (IPCAs), using singular value decomposition (SVD) procedure.
+In the next chuck of code we are going to apply AMMI using the package Metan;
+
+```
+#perform AMMI1 biplot
+model <- performs_ammi(datalentil_16, ENV, GEN, rep, resp = YLD, Verbose =FALSE)
+a<- plot_scores(model, type = 1,
+                col.env = "blue",
+                col.segm.env = "blue",
+                col.gen = "black", plot_theme = theme_metan_minimal(), title = TRUE)
+a
+
+data_ammi<- as.data.frame(a[["data"]])
+pivot_table <- datalentil_16 %>%
+  select(GEN, Bio_stat) %>%
+  group_by(GEN, Bio_stat) %>%
+  summarise( .groups = 'drop')
+names(pivot_table)[1] <-paste("Code")
+
+data_ammi<-left_join(data_ammi, pivot_table, by='Code')
+
+ammi1<-ggplot() +
+  geom_hline(yintercept=0, linetype="dashed", color = gray(.80), size=0.6) +
+  geom_vline(xintercept=0, linetype="dashed", color = gray(.80), size=0.6) +
+  geom_point(data = subset(data_ammi,type == "GEN"), aes(x=PC1, y=PC2, color=Bio_stat), size = 4.5) +
+  scale_color_manual(values = c("darkred", "darkorange", "chartreuse3")) + 
+  geom_label_repel(data = subset(data_ammi,type == "GEN"), aes(x=PC1, y=PC2, label = Code), size = 2.5, family = "Times", max.overlaps = Inf) +
+  geom_segment(data = subset(data_ammi,type == "ENV"), aes(xend=PC1, yend=PC2, x=0, y=0), size=0.2, linetype=1, arrow=arrow(length = unit(0.02, "npc")))+
+  geom_label_repel(data = subset(data_ammi,type == "ENV"), aes(x=PC1, y=PC2, label = Code), size = 2.5, family = "Times, max.overlaps = Inf") +
+  xlab("Yield (g/plot)") + ylab("PC1: 45%") +
+  guides(color=guide_legend(title="Biological status")) +
+  theme_bw(base_size = 10, base_family = "Times") +
+   theme(panel.background = element_blank(), legend.background = element_blank(), panel.grid = element_blank(), plot.background = element_blank(), legend.text=element_text(size=rel(1)), strip.text = element_text(size=15),axis.text.x = element_text(size = 10), axis.text.y = element_text(size = 10))+
+ labs(title = "AMMI 1")
+ammi1
+
+
+#perform AMMI2 biplot
+model <- performs_ammi(datalentil_16, ENV, GEN, rep, resp = YLD, Verbose =FALSE)
+b<- plot_scores(model, type = 2,
+                col.env = "blue",
+                col.segm.env = "blue",
+                col.gen = "black", plot_theme = theme_metan_minimal(), title = TRUE)
+b
+
+data_ammi2<- as.data.frame(b[["data"]])
+pivot_table <- datalentil_16 %>%
+  select(GEN, Bio_stat) %>%
+  group_by(GEN, Bio_stat) %>%
+  summarise( .groups = 'drop')
+names(pivot_table)[1] <-paste("Code")
+
+data_ammi2<-left_join(data_ammi2, pivot_table, by='Code')
+
+ammi2<-ggplot() +
+  geom_hline(yintercept=0, linetype="dashed", color = gray(.80), size=0.6) +
+  geom_vline(xintercept=0, linetype="dashed", color = gray(.80), size=0.6) +
+  geom_point(data = subset(data_ammi,type == "GEN"), aes(x=PC1, y=PC2, color=Bio_stat), size = 4.5) +
+  scale_color_manual(values = c("darkred", "darkorange", "chartreuse3")) + 
+  geom_label_repel(data = subset(data_ammi,type == "GEN"), aes(x=PC1, y=PC2, label = Code), size = 2.5, family = "Times" ,max.overlaps = Inf) +
+  geom_segment(data = subset(data_ammi,type == "ENV"), aes(xend=PC1, yend=PC2, x=0, y=0), size=0.2, linetype=1, arrow=arrow(length = unit(0.02, "npc")))+
+  geom_label_repel(data = subset(data_ammi,type == "ENV"), aes(x=PC1, y=PC2, label = Code), size = 2.5, family = "Times", max.overlaps = Inf) +
+  xlab("PC1: 45%") + ylab("PC2: 34.7%") +
+  guides(color=guide_legend(title="Biological status")) +
+  theme_bw(base_size = 10, base_family = "Times") +
+   theme(panel.background = element_blank(), legend.background = element_blank(), panel.grid = element_blank(), plot.background = element_blank(), legend.text=element_text(size=rel(1)), strip.text = element_text(size=15),axis.text.x = element_text(size = 10), axis.text.y = element_text(size = 10))+
+ labs(title = "AMMI 2")
+ammi2
+
+ammi<-ggarrange(ammi1, ammi2, nrow=1, ncol=2)
+ggsave("ammi.jpeg", plot = ammi, device = "jpeg", width = 400, height = 180, units = "mm", dpi = 1000, bg = "white")
+```
+
+![ammi](https://github.com/user-attachments/assets/234a933f-240f-42fc-8269-b94f4775a240)

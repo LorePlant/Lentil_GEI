@@ -185,12 +185,13 @@ FPH<- ggplot(blup_fph, aes(x=Predicted, y=reorder(GEN, Predicted), group =signif
     xlab("First pod height (cm)") + ylab("genotypes")
 FPH
 
-together<- ggarrange(Yield, SW, F1, FP, CH, PH, FPH, nrow = 2, ncol = 3)
+together<- ggarrange(Yield, SW, F1, FP, CH, PH, FPH, nrow = 2, ncol = 4)
 
 ggsave("blup46.jpeg", plot = together, device = "jpeg", width = 400, height = 300, units = "mm", dpi = 1000)
 
 ```
-![blup46](https://github.com/user-attachments/assets/b8949c25-a9df-4927-af8d-a1ad8a45758c)
+
+![blup46](https://github.com/user-attachments/assets/e6a4c269-46ae-4d5c-a850-6eb73f0226ac)
 
 
 Phenotypic data collected from the 16 genotypes in common among all trials were used to estimate trait correlation and dissect Genotypes by Environment Interaction (GEI).
@@ -384,6 +385,9 @@ names(blup_FPH_OS2021)[3]<- paste("FPH_OS2021")
 df_list <- list(blup_yld_MA2019, blup_FirstF_MA2019, blup_FirstP_MA2019, blup_CH_MA2019, blup_PH_MA2019, blup_FPH_MA2019, blup_yld_MA2020, blup_FirstF_MA2020, blup_FirstP_MA2020, blup_CH_MA2020, blup_PH_MA2020, blup_FPH_MA2020, blup_yld_OA2019, blup_FirstF_OA2019, blup_FirstP_OA2019, blup_CH_OA2019, blup_PH_OA2019, blup_FPH_OA2019, blup_yld_OA2020, blup_FirstF_OA2020, blup_FirstP_OA2020, blup_CH_OA2020, blup_PH_OA2020, blup_FPH_OA2020, blup_yld_OA2021, blup_FirstF_OA2021, blup_FirstP_OA2021, blup_CH_OA2021, blup_PH_OA2021, blup_FPH_OA2021, blup_yld_OS2020, blup_FirstF_OS2020, blup_FirstP_OS2020, blup_CH_OS2020, blup_PH_OS2020, blup_FPH_OS2020, blup_yld_OS2021, blup_FirstF_OS2021, blup_FirstP_OS2021, blup_CH_OS2021, blup_PH_OS2021, blup_FPH_OS2021)      
 
 #merge all data frames together
+
+library(tidyverse)
+library(dplyr)
 df2 <- df_list %>% reduce(inner_join, by='GEN')
 
 # R base - Select columns from list
@@ -411,6 +415,9 @@ res.pca<-PCA(readyPC[,2:43], scale.unit = TRUE, ncp = 5, graph = TRUE)
 ind <- get_pca_ind(res.pca)
 var <- get_pca_var(res.pca)
 var
+```
+Plotting the results using ggplot2
+```
 library(ggplot2)
 library(ggrepel)
 
@@ -419,36 +426,41 @@ pca_data <- as.data.frame(ind$coord)
 pca_data$Bio_stat <- readyPC$Bio_stat
 pca_data$GEN <- readyPC$GEN  # Assuming you want to label individuals with GEN
 
-TAB_var <- as.data.frame(var$coord)
+
 
 # Plotting
-#scree plot
-scree<- ggplot(pca_data, aes(x = Dim.1, y = Dim.2, color = Bio_stat, label = GEN)) +
-  geom_point(size = 3, shape = 16) +  # Individual points
-  geom_text_repel(size = 3) +         # Add labels with repel
+#score plot
+score<- ggplot(pca_data, aes(x = Dim.1, y = Dim.2)) +
+ geom_hline(yintercept=0, linetype="dashed", color = gray(.80), size=0.6) +
+  geom_vline(xintercept=0, linetype="dashed", color = gray(.80), size=0.6) +
+  geom_point(data = pca_data, aes(x = Dim.1, y = Dim.2, color = Bio_stat), size = 3, shape = 16) +  # Individual points
+geom_label_repel(data = pca_data, aes(x=Dim.1, y=Dim.2, label = GEN), size = 2.5, family = "Times",max.overlaps = Inf) +
   scale_color_manual(values = c("darkred", "darkorange", "darkgreen")) +  # Custom color palette
-theme_classic() +
+theme_bw(base_size = 13, base_family = "Times") +
+  theme(panel.background = element_blank(), legend.background = element_blank(), panel.grid = element_blank(), plot.background = element_blank(), legend.text=element_text(size=rel(1)), strip.text = element_text(size=15),axis.text.x = element_text(size = 10), axis.text.y = element_text(size = 10))+
     xlab("PC1: 33.4%") + ylab("PC1: 23.6%")+
-  labs(title = "PCA Plot", color = "Groups") +
-  theme(legend.title = element_text(size = 10))
+  labs(title = "PCA score plot", color = "Groups")
 
-ggsave("PCA16scree.jpeg", plot = scree, device = "jpeg", width = 150, height = 150, units = "mm", dpi = 1000)
+TAB_var <- as.data.frame(var$coord)
+dd<-data.frame(trait = c("yield", "flowering", "flowering", "architecture", "architecture","architecture", "yield", "flowering", "flowering", "architecture", "architecture","architecture", "yield", "flowering", "flowering", "architecture", "architecture","architecture", "yield", "flowering", "flowering", "architecture", "architecture","architecture", "yield", "flowering", "flowering", "architecture", "architecture","architecture", "yield", "flowering", "flowering", "architecture", "architecture","architecture", "yield", "flowering", "flowering", "architecture", "architecture","architecture"))
+TAB_var <- cbind(TAB_var, dd)
+#loading
+loading<- ggplot(TAB_var, aes(x = Dim.1, y = Dim.2)) +
+ geom_hline(yintercept=0, linetype="dashed", color = gray(.80), size=0.6) +
+  geom_vline(xintercept=0, linetype="dashed", color = gray(.80), size=0.6) +
+  geom_segment(data = TAB_var, aes(xend=Dim.1, yend=Dim.2, x=0, y=0, color = trait), size=0.4, linetype=1, arrow=arrow(length = unit(0.02, "npc")))+ # Individual points
+geom_label_repel(data = TAB_var, aes(x=Dim.1, y=Dim.2, label = rownames(TAB_var)), size = 2.5, family = "Times",max.overlaps = Inf) +
+  scale_color_manual(values = c("blue3",  "darkorange", "green3")) +  # Custom color palette
+theme_bw(base_size = 13, base_family = "Times") +
+  theme(panel.background = element_blank(), legend.background = element_blank(), panel.grid = element_blank(), plot.background = element_blank(), legend.text=element_text(size=rel(1)), strip.text = element_text(size=15),axis.text.x = element_text(size = 10), axis.text.y = element_text(size = 10))+
+    xlab("PC1: 33.4%") + ylab("PC1: 23.6%")+
+  labs(title = "PCA loading plot")
+
+PCAplot<-ggarrange(score, loading, nrow=1, ncol=2)
+
+
+ggsave("PCAplot.jpeg", plot = PCAplot, device = "jpeg", width = 270, height = 180, units = "mm", dpi = 1000)
 ```
 ![PCA16scree](https://github.com/user-attachments/assets/36a5600e-7456-4dc3-a0f2-15c0ae64b898)
 
-
-
-
-
-
-
-
-#loading
-loading<- ggplot(TAB_var, aes(x = Dim.1, y = Dim.2, color = Bio_stat, label = GEN)) +
-  geom_point(size = 3, shape = 16) +  # Individual points
-  geom_text_repel(size = 3) +         # Add labels with repel
-  scale_color_manual(values = c("darkred", "darkorange", "darkgreen")) +  # Custom color palette
-theme_classic() +
-    xlab("PC1: 33.4%") + ylab("PC1: 23.6%")+
-  labs(title = "PCA Plot", color = "Groups") +
-  theme(legend.title = element_text(size = 10))
+![PCAplot](https://github.com/user-attachments/assets/96032c96-1803-4d88-844f-9667824e856c)

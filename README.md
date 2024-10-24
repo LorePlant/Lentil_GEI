@@ -459,8 +459,7 @@ theme_bw(base_size = 13, base_family = "Times") +
 PCAplot<-ggarrange(score, loading, nrow=1, ncol=2)
 
 
-ggsave("PCAplot.jpeg", plot = PCAplot, device = "jpeg", width = 270, height = 180, units = "mm", dpi = 1000)
+ggsave("PCAplot.jpeg", plot = PCAplot, device = "jpeg", width = 400, height = 180, units = "mm", dpi = 1000, bg = "white")
 ```
-![PCA16scree](https://github.com/user-attachments/assets/36a5600e-7456-4dc3-a0f2-15c0ae64b898)
 
-![PCAplot](https://github.com/user-attachments/assets/96032c96-1803-4d88-844f-9667824e856c)
+![PCAplot](https://github.com/user-attachments/assets/0014832a-53b2-4eb1-8876-aa47183c18f2)

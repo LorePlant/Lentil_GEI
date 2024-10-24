@@ -65,16 +65,16 @@ print("Seed Weight")
 mixed_mod<-gamem_met(datalentil46, env = ENV, gen = GEN, rep = REP, resp = SW, random = ("gen"), verbose = TRUE)
 blup_sw<-data.frame(mixed_mod$SW$BLUPgen)
 sw_average<- mean(datalentil46$SW, na.rm = TRUE)
-above<- data.frame(gen = blup_sw$GEN[which(blup_sw$LL>ch_average)])
-below<- data.frame(gen= blup_ch$GEN[which(blup_sw$UL<ch_average)])
+above<- data.frame(gen = blup_sw$GEN[which(blup_sw$LL>sw_average)])
+below<- data.frame(gen= blup_sw$GEN[which(blup_sw$UL<sw_average)])
 
 
 blup_sw$significance <- "Average"
-blup_sw$significance[blup_ch$GEN%in%above$gen] <- "Above"
-blup_sw$significance[blup_ch$GEN%in%below$gen] <- "Below"
+blup_sw$significance[blup_sw$GEN%in%above$gen] <- "Above"
+blup_sw$significance[blup_sw$GEN%in%below$gen] <- "Below"
 SW<- ggplot(blup_sw, aes(x=Predicted, y=reorder(GEN, Predicted), group =significance)) + 
     geom_point(aes(col = significance), size=4)+
-    geom_vline(xintercept = 22.96)+
+    geom_vline(xintercept = 23)+
     scale_color_manual(values = c("Blue", "gray", "red"))+
     geom_errorbar(aes(xmin=LL, xmax=UL), width=.1)+
     theme_classic2(base_size = 11)+

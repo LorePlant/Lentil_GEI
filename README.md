@@ -459,3 +459,10 @@ ggsave("PCAplot.jpeg", plot = PCAplot, device = "jpeg", width = 400, height = 18
 ```
 
 ![PCAplot](https://github.com/user-attachments/assets/0014832a-53b2-4eb1-8876-aa47183c18f2)
+
+
+From the same dataset of 16 genotypes in 7 environments we are going to estimate BLUPs for flowering architectural and production traits using the mixed model (1) $P = G + E + GEI$. 
+Traits genetic correlation wull be evaluated using pairwise-Pearson correlation.
+
+
+

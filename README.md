@@ -36,21 +36,21 @@ b
 ```
 For a more personalzed output using a ggplot
 ```
-#Yield
+library(ggplot2)
+library(viridis)
+library(ggpubr)
+
+print("Yield")
 mixed_mod<-gamem_met(datalentil46, env = ENV, gen = GEN, rep = REP, resp = YLD, random = ("gen"), verbose = TRUE)
   blup_yld<-data.frame(mixed_mod$YLD$BLUPgen)
 yld_average<- mean(datalentil46$YLD, na.rm = TRUE)
 above<- data.frame(gen = blup_yld$GEN[which(blup_yld$LL>yld_average)])
 below<- data.frame(gen= blup_yld$GEN[which(blup_yld$UL<yld_average)])
 
-
 blup_yld$significance <- "Average"
 blup_yld$significance[blup_yld$GEN%in%above$gen] <- "Above"
 blup_yld$significance[blup_yld$GEN%in%below$gen] <- "Below"
 
-library(ggplot2)
-library(viridis)
-library(ggpubr)
 Yield<- ggplot(blup_yld, aes(x=Predicted, y=reorder(GEN, Predicted), group =significance)) + 
     geom_point(aes(col = significance), size=4)+
     geom_vline(xintercept = 480)+
@@ -61,7 +61,27 @@ Yield<- ggplot(blup_yld, aes(x=Predicted, y=reorder(GEN, Predicted), group =sign
 
 Yield
 
-#Canopy height
+print("Seed Weight")
+mixed_mod<-gamem_met(datalentil46, env = ENV, gen = GEN, rep = REP, resp = SW, random = ("gen"), verbose = TRUE)
+blup_sw<-data.frame(mixed_mod$SW$BLUPgen)
+sw_average<- mean(datalentil46$SW, na.rm = TRUE)
+above<- data.frame(gen = blup_sw$GEN[which(blup_sw$LL>ch_average)])
+below<- data.frame(gen= blup_ch$GEN[which(blup_sw$UL<ch_average)])
+
+
+blup_sw$significance <- "Average"
+blup_sw$significance[blup_ch$GEN%in%above$gen] <- "Above"
+blup_sw$significance[blup_ch$GEN%in%below$gen] <- "Below"
+SW<- ggplot(blup_sw, aes(x=Predicted, y=reorder(GEN, Predicted), group =significance)) + 
+    geom_point(aes(col = significance), size=4)+
+    geom_vline(xintercept = 22.96)+
+    scale_color_manual(values = c("Blue", "gray", "red"))+
+    geom_errorbar(aes(xmin=LL, xmax=UL), width=.1)+
+    theme_classic2(base_size = 11)+
+    xlab("1000 Seed Weight(g) ") + ylab("genotypes")
+SW
+
+print("Canopy height")
 mixed_mod<-gamem_met(datalentil46, env = ENV, gen = GEN, rep = REP, resp = CH, random = ("gen"), verbose = TRUE)
 blup_ch<-data.frame(mixed_mod$CH$BLUPgen)
 ch_average<- mean(datalentil46$CH, na.rm = TRUE)
@@ -81,7 +101,7 @@ CH<- ggplot(blup_ch, aes(x=Predicted, y=reorder(GEN, Predicted), group =signific
     xlab("Canopy Height (cm)") + ylab("genotypes")
 CH
 
-#First Flower
+print("First Flower")
 
 mixed_mod<-gamem_met(datalentil46, env = ENV, gen = GEN, rep = REP, resp = First_flower, random = ("gen"), verbose = TRUE)
 blup_f<-data.frame(mixed_mod$First_flower$BLUPgen)
@@ -102,7 +122,7 @@ F1<- ggplot(blup_f, aes(x=Predicted, y=reorder(GEN, Predicted), group =significa
     xlab("First flower(DAS)") + ylab("genotypes")
 F1
 
-#First pod
+print("First pod")
 
 mixed_mod<-gamem_met(datalentil46, env = ENV, gen = GEN, rep = REP, resp = First_pod, random = ("gen"), verbose = TRUE)
 blup_fp<-data.frame(mixed_mod$First_pod$BLUPgen)
@@ -124,7 +144,7 @@ FP<- ggplot(blup_fp, aes(x=Predicted, y=reorder(GEN, Predicted), group =signific
 FP
 
 
- #Plant height
+ print("Plant height")
  mixed_mod<-gamem_met(datalentil46, env = ENV, gen = GEN, rep = REP, resp = PH, random = ("gen"), verbose = TRUE)
  blup_ph<-data.frame(mixed_mod$PH$BLUPgen)
  ph_average<- mean(datalentil46$PH, na.rm = TRUE)
@@ -145,7 +165,7 @@ FP
  PH
 
 
-#First pod height
+print("First pod height")
 mixed_mod<-gamem_met(datalentil46, env = ENV, gen = GEN, rep = REP, resp = FPH, random = ("gen"), verbose = TRUE)
 blup_fph<-data.frame(mixed_mod$FPH$BLUPgen)
 fph_average<- mean(datalentil46$FPH, na.rm = TRUE)
@@ -165,7 +185,7 @@ FPH<- ggplot(blup_fph, aes(x=Predicted, y=reorder(GEN, Predicted), group =signif
     xlab("First pod height (cm)") + ylab("genotypes")
 FPH
 
-together<- ggarrange(Yield, F1, FP, CH, PH, FPH, nrow = 2, ncol = 3)
+together<- ggarrange(Yield, SW, F1, FP, CH, PH, FPH, nrow = 2, ncol = 3)
 
 ggsave("blup46.jpeg", plot = together, device = "jpeg", width = 400, height = 300, units = "mm", dpi = 1000)
 

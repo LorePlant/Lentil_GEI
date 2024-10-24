@@ -458,7 +458,8 @@ PCAplot<-ggarrange(score, loading, nrow=1, ncol=2)
 ggsave("PCAplot.jpeg", plot = PCAplot, device = "jpeg", width = 400, height = 180, units = "mm", dpi = 1000, bg = "white")
 ```
 
-![PCAplot](https://github.com/user-attachments/assets/0014832a-53b2-4eb1-8876-aa47183c18f2)
+![PCAplot](https://github.com/user-attachments/assets/7d9c74af-c30e-411f-952a-8a7a98f8f21a)
+
 
 
 From the same dataset of 16 genotypes in 7 environments we are going to estimate BLUPs for flowering architectural and production traits using the mixed model (1) $P = G + E + GEI$. 

@@ -1,5 +1,5 @@
 
-## Newl-identified Lentil (Lens culinaris Medik.) genotypes for Enhanced Adaptation to the Mediterranean Environment 
+# Newl-identified Lentil (Lens culinaris Medik.) genotypes for Enhanced Adaptation to the Mediterranean Environment 
 In this readme are reported all the analysis's steps present in the paper of Rocchetti et al.,2025
 
 [1) BLUP estimations](#BLUP-estimation)

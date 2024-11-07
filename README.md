@@ -3,9 +3,9 @@
 In this readme are reported all the analysis's steps present in the paper of Rocchetti et al.,2025
 
 [# 1) BLUP estimations](#BLUP-estimation)
-# 2) Heritability estimation
-# 3) Genetic correlation among traits
-# 4) GEI dissection - AMMI model
+[# 2) Heritability estimation](Heritability)
+[# 3) Genetic correlation](#Genetic-correlation)
+[# 4) GEI dissection - AMMI model](#GEI-dissection---AMMI-model)
    
 
 > open libraries and set directory
@@ -200,7 +200,7 @@ ggsave("blup46.jpeg", plot = together, device = "jpeg", width = 400, height = 30
 
 ![blup46](https://github.com/user-attachments/assets/e6a4c269-46ae-4d5c-a850-6eb73f0226ac)
 
-
+# Heritability 
 
 From the theoretical framework, heritability is equivalent to the regression of breeding value on phenotypic value (Falconer et al., 1989). Therefore, broad sense heritability was estimated for the unbalanced dataset of 46 genotypes, using the regression coefficient (slope of the regression) between BLUPg and relative phenotypic value
 
@@ -220,7 +220,7 @@ Coefficients:
 
 ```
 
-
+# Genetic correlation
 
 Phenotypic data collected from the 16 genotypes in common among all trials were used to estimate trait correlation and dissect Genotypes by Environment Interaction (GEI).
 In the upcoming code we are going to estimate BLUPs for each combination of trait and environment following the model the mixed model  $Y = G + rep + e$ where _G_ is considered random and _rep_ fixed
@@ -546,6 +546,7 @@ ggsave("corrplot.jpeg", plot = cc, device = "jpeg", width = 250, height = 180, u
 
 ![corrplot](https://github.com/user-attachments/assets/d71abbe2-8bb7-4421-a753-099a416765bf)
 
+# GEI dissection - AMMI model
 
 The Additive Main Effect and Multiplicative Interaction (AMMI) model (Gauch, 1988; van Eeuwijk, 1995) was used as a fixed model framework to dissect GEI variance in different Interaction Principal Components (IPCAs), using singular value decomposition (SVD) procedure.
 In the next chuck of code we are going to apply AMMI using the package Metan;

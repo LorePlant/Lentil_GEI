@@ -1,6 +1,11 @@
 
 ## Newl-identified Lentil (Lens culinaris Medik.) genotypes for Enhanced Adaptation to the Mediterranean Environment 
 In this readme are reported all the analysis's steps present in the paper of Rocchetti et al.,2025
+[# 1) BLUP estimations](# BLUP estimation)
+# 2) Heritability estimation
+# 3) Genetic correlation among traits
+# 4) GEI dissection - AMMI model
+   
 
 > open libraries and set directory
 ```
@@ -11,8 +16,9 @@ install.packages("metan")
 library(metan)
 ```
 
-> BLUP estimation for the whole set of 46 genotypes in è different environment
+# BLUP estimation
 
+Phenotypic data collected from the entire set of 46 genotypes were used to estimate trait heritability and genotype breeding value.
 Considering the linear model:
 
  (1) $P = G + E + GEI$

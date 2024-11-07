@@ -3,8 +3,11 @@
 In this readme are reported all the analysis's steps present in the paper of Rocchetti et al.,2025
 
 [# 1) BLUP estimations](#BLUP-estimation)
+
 [# 2) Heritability estimation](Heritability)
+
 [# 3) Genetic correlation](#Genetic-correlation)
+
 [# 4) GEI dissection - AMMI model](#GEI-dissection---AMMI-model)
    
 

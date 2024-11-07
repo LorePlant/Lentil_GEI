@@ -1,6 +1,7 @@
 
 ## Newl-identified Lentil (Lens culinaris Medik.) genotypes for Enhanced Adaptation to the Mediterranean Environment 
 In this readme are reported all the analysis's steps present in the paper of Rocchetti et al.,2025
+
 [# 1) BLUP estimations](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.11662)
 # 2) Heritability estimation
 # 3) Genetic correlation among traits

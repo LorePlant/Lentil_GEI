@@ -11,8 +11,7 @@ In this readme are reported all the analysis's steps present in the paper of Roc
 [4) GEI dissection - AMMI model](#GEI-dissection---AMMI-model)
 
    
-
-> open libraries and set directory
+_open libraries and set directory_
 ```
 setwd("/lustre/rocchettil/Paper_lentil/Manoscript_Lentil_editing")
 datalentil46<- read.csv("lentil46whole.csv", header = TRUE)

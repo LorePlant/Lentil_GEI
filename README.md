@@ -194,6 +194,27 @@ ggsave("blup46.jpeg", plot = together, device = "jpeg", width = 400, height = 30
 ![blup46](https://github.com/user-attachments/assets/e6a4c269-46ae-4d5c-a850-6eb73f0226ac)
 
 
+
+From the theoretical framework, heritability is equivalent to the regression of breeding value on phenotypic value (Falconer et al., 1989). Therefore, broad sense heritability was estimated for the unbalanced dataset of 46 genotypes, using the regression coefficient (slope of the regression) between BLUPg and relative phenotypic value
+
+Here an example of Yield heritability estimation
+
+```
+model <- lm(BLUPg ~ Y, data = blup_yld)
+model
+
+#####
+Call:
+lm(formula = BLUPg ~ Y, data = blup_yld)
+
+Coefficients:
+(Intercept)            Y  
+  -293.9505       0.6644
+
+```
+
+
+
 Phenotypic data collected from the 16 genotypes in common among all trials were used to estimate trait correlation and dissect Genotypes by Environment Interaction (GEI).
 In the upcoming code we are going to estimate BLUPs for each combination of trait and environment following the model the mixed model  $Y = G + rep + e$ where _G_ is considered random and _rep_ fixed
 

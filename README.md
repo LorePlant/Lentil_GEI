@@ -4,7 +4,7 @@ In this readme are reported all the analysis's steps present in the paper of Roc
 
 [1) BLUP estimations](#BLUP-estimation)
 
-[2) Heritability estimation](Heritability)
+[2) Heritability](Heritability)
 
 [3) Genetic correlation](#Genetic-correlation)
 

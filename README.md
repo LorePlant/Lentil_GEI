@@ -10,6 +10,8 @@ In this readme are reported all the analysis's steps present in the paper of Roc
 
 [4) GEI dissection - AMMI model](#GEI-dissection---AMMI-model)
 
+[5) Genotypes, Locations and Seasons effect](#Genotypes,-Locations-and-Seasons-effects)
+
    
 _open libraries and set directory_
 ```
@@ -625,3 +627,139 @@ ggsave("ammi.jpeg", plot = ammi, device = "jpeg", width = 400, height = 180, uni
 ```
 
 ![ammi](https://github.com/user-attachments/assets/ed5609e5-2c97-4497-9fbc-6bef31171c9a)
+
+
+# Genotypes, Locations and Seasons effects
+
+With the aim of better inform farmers practise and associated genotype interaction, we divided the environmental effect in Location and Season effect, using the following model:
+
+ $_P = G + Location + Season + G*Location + G*Seasons_$
+
+Throughout this model, considering all the effect as fixed factors, we can specifically examine the sowing season effect and analyze the interaction between genotypes and autumn versus spring sowing seasons.
+ 
+In the following chunks of code we are going to analyze each effect and print the results
+
+> Genotype efect
+
+```
+datalentil_16<- read.csv("lentil_16.csv", header = TRUE)
+
+groups <- datalentil_16 %>%
+  select(GEN, Bio_stat) %>%
+  group_by(GEN, Bio_stat) %>%
+  summarise( .groups = 'drop') 
+
+model <- lm(YLD ~ GEN + Loc + Season + GEN*Loc + GEN*Season , data = datalentil_16)
+summary(model)
+
+
+
+#genotype effect
+value<-lsmeans(model, "GEN")
+GEN<- as.data.frame(value)
+GEN<-left_join(GEN, groups, by = "GEN")
+GEN$group<-"group"
+
+G<- ggplot(GEN, aes(x=GEN, y=lsmean, group = group)) + 
+  geom_point(aes(col =Bio_stat), size = 3)+
+  geom_line()+
+  geom_errorbar(aes(ymin=lower.CL, ymax=upper.CL), width=.1)+
+  theme_bw(base_size = 14)+
+  theme(axis.text.x = element_text(angle = 45, hjust=1))+
+  scale_color_manual(values = c("darkred", "darkorange", "chartreuse3"))+
+  xlab("Genotypes") + ylab("LSmean (g/plot)")
+
+G
+```
+![GEN_effect](https://github.com/user-attachments/assets/b67fec74-7347-417a-b7fb-32ff254e8a52)
+
+```
+#Location effect
+value<-lsmeans(model, "Loc")
+LOC<- as.data.frame(value)
+
+LOC$group<-"group"
+
+L <- ggplot(LOC, aes(x=Loc, y=lsmean, group=group)) + 
+  geom_point(aes(x=Loc, y=lsmean), size = 3)+
+  geom_line()+
+  geom_errorbar(aes(ymin=lower.CL, ymax=upper.CL), width=.1)+
+  theme_bw(base_size = 14)+
+  scale_color_viridis(discrete = TRUE, option = "D")+
+  xlab("Locality") + ylab("LSmean (g/plot)")
+L
+
+ggsave("Loc_effect.jpeg", plot = L, device = "jpeg", width = 150, height = 80, units = "mm", dpi = 1000, bg = "white")
+```
+
+![Loc_effect](https://github.com/user-attachments/assets/c78fe167-716f-458f-9b9e-a2b2a7c6d073)
+
+```
+#season effect
+value<-lsmeans(model, "Season")
+SE<- as.data.frame(value)
+
+SE$group<-"group"
+
+S <- ggplot(SE, aes(x=Season, y=lsmean, group=group)) + 
+  geom_point(aes(x=Season, y=lsmean), size = 3)+
+  geom_line()+
+  geom_errorbar(aes(ymin=lower.CL, ymax=upper.CL), width=.1)+
+  theme_bw(base_size = 14)+
+  scale_color_viridis(discrete = TRUE, option = "D")+
+  xlab("Locality") + ylab("LSmean (g/plot)")
+S
+ggsave("Ses_effect.jpeg", plot = S, device = "jpeg", width = 150, height = 80, units = "mm", dpi = 1000, bg = "white")
+```
+![Ses_effect](https://github.com/user-attachments/assets/03cffec3-12f7-4c3f-825a-3006b431f282)
+
+```
+#Genotype*localtion interaction
+
+value<-lsmeans(model, ~GEN|Loc)
+GL<- as.data.frame(value)
+
+GL$group<-"group"
+GL<-left_join(GL, groups, by = "GEN")
+
+
+GenLoc<- ggplot(GL, aes(x=GEN, y=lsmean, group = Loc))+ 
+  geom_point(aes(col = Bio_stat), size = 3)+
+  geom_line(aes(x=GEN, y=lsmean, linetype=Loc), linewidth =0.8)+
+  geom_errorbar(aes(ymin=lower.CL, ymax=upper.CL), width=.1)+
+  theme_bw(base_size = 14)+
+  theme(axis.text.x = element_text(angle = 45, hjust=1))+
+  scale_color_manual(values = c("darkred", "darkorange", "chartreuse3"))+
+  scale_linetype_manual(values=c("solid", "longdash"))+
+  xlab("Genotypes") + ylab("LSmean (g/plot)")
+GenLoc
+ggsave("GenLoc_effect.jpeg", plot = GenLoc, device = "jpeg", width = 200, height = 120, units = "mm", dpi = 1000, bg = "white")
+```
+![GenLoc_effect](https://github.com/user-attachments/assets/b35225eb-5ef3-4573-9f37-b92f513bb2a7)
+
+
+```
+#Genotype*season interaction
+
+value<-lsmeans(model, ~GEN|Season)
+GS<- as.data.frame(value)
+
+GS$group<-"group"
+GS<-left_join(GS,groups, by = "GEN")
+
+GenS<- ggplot(GS, aes(x=GEN, y=lsmean, group = Season))+ 
+  geom_point(aes(col =Bio_stat), size = 3)+
+  geom_line(aes(x=GEN, y=lsmean, linetype=Season), linewidth =0.8)+
+  geom_errorbar(aes(ymin=lower.CL, ymax=upper.CL), width=.1)+
+  theme_bw(base_size = 14)+
+  theme(axis.text.x = element_text(angle = 45, hjust=1))+
+  scale_color_manual(values = c("darkred", "darkorange", "chartreuse3"))+
+  scale_linetype_manual(values=c("solid", "longdash"))+
+  xlab("Genotypes") + ylab("LSmean (g/plot)")
+GenS
+
+ggsave("GenSes_effect.jpeg", plot = GenS, device = "jpeg", width = 200, height = 120, units = "mm", dpi = 1000, bg = "white")
+```
+![GenSes_effect](https://github.com/user-attachments/assets/a012a95f-9380-4f81-8f1b-4b03889224c4)
+
+

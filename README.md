@@ -10,7 +10,7 @@ In this readme are reported all the analysis's steps present in the paper of Roc
 
 [4) GEI dissection - AMMI model](#GEI-dissection---AMMI-model)
 
-[5) Genotypes, Locations and Seasons effect](#Genotypes,-Locations-and-Seasons-effects)
+[5) Genotypes, Locations and Seasons effects](#Genotypes,-Locations-and-Seasons-effects)
 
    
 _open libraries and set directory_

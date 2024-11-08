@@ -639,7 +639,7 @@ Throughout this model, considering all the effect as fixed factors, we can speci
  
 In the following chunks of code we are going to analyze each effect and print the results
 
-> Genotype efect
+> Genotype effect
 
 ```
 datalentil_16<- read.csv("lentil_16.csv", header = TRUE)
@@ -673,6 +673,8 @@ G
 ```
 ![GEN_effect](https://github.com/user-attachments/assets/b67fec74-7347-417a-b7fb-32ff254e8a52)
 
+
+> Location effect
 ```
 #Location effect
 value<-lsmeans(model, "Loc")
@@ -694,6 +696,8 @@ ggsave("Loc_effect.jpeg", plot = L, device = "jpeg", width = 150, height = 80, u
 
 ![Loc_effect](https://github.com/user-attachments/assets/c78fe167-716f-458f-9b9e-a2b2a7c6d073)
 
+
+> Season effect
 ```
 #season effect
 value<-lsmeans(model, "Season")
@@ -713,6 +717,8 @@ ggsave("Ses_effect.jpeg", plot = S, device = "jpeg", width = 150, height = 80, u
 ```
 ![Ses_effect](https://github.com/user-attachments/assets/03cffec3-12f7-4c3f-825a-3006b431f282)
 
+
+> Genotype*Location effect
 ```
 #Genotype*localtion interaction
 
@@ -738,6 +744,7 @@ ggsave("GenLoc_effect.jpeg", plot = GenLoc, device = "jpeg", width = 200, height
 ![GenLoc_effect](https://github.com/user-attachments/assets/b35225eb-5ef3-4573-9f37-b92f513bb2a7)
 
 
+> Genotype*Season
 ```
 #Genotype*season interaction
 

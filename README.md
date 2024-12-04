@@ -207,7 +207,7 @@ ggsave("blup46.jpeg", plot = together, device = "jpeg", width = 400, height = 30
 
 ## Heritability 
 
-From the theoretical framework, heritability is equivalent to the regression of breeding value on phenotypic value (Falconer et al., 1989). Therefore, broad sense heritability was estimated for the unbalanced dataset of 46 genotypes, using the regression coefficient (slope of the regression) between BLUPg and relative phenotypic value
+From the theoretical framework, heritability is equivalent to the regression of breeding value on phenotypic value (Falconer et al., 1989). Therefore, broad sense heritability was estimated for the unbalanced dataset of 46 genotypes, using the regression coefficient (slope) of the regression between BLUPg and relative phenotypic value
 
 Here an example of Yield heritability estimation
 

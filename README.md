@@ -429,7 +429,7 @@ df<-df2[,c("GEN","yld_MA2019", "FirstF_MA2019", "FirstP_MA2019", "CH_MA2019", "P
 
 ```
 The derive dataset contains all the BLUP combination for the specific combination of trait and environment. 
-The obtained dataset was used to conducte a PCA to visualize trait's genetic correlation and to have a general agronomic overview of the material
+The obtained dataset was used to conducte a PCA to visualize trait's genetic correlation and to have a general agronomic overview of the population
 
 ```
 #add biological status

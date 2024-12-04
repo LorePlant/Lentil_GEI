@@ -633,7 +633,7 @@ ggsave("ammi.jpeg", plot = ammi, device = "jpeg", width = 400, height = 180, uni
 
 With the aim of better inform farmers practise and associated genotype interaction, we divided the environmental effect in Location and Season effect, using the following model:
 
- $_P = G + Location + Season + G*Location + G*Seasons_$
+ $P = G + Location + Season + G * Location + G * Seasons$
 
 Throughout this model, considering all the effect as fixed factors, we can specifically examine the sowing season effect and analyze the interaction between genotypes and autumn versus spring sowing seasons.
  
